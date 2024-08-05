@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,7 +15,9 @@ public class Chess : Game
     ButtonState oldState = ButtonState.Released;
     Texture2D spriteSheet;
     Texture2D square;
-    Piece selected = null;
+    Piece selected;
+    Vector2[] highlight;
+    Team currentTeam;
 
     public Chess()
     {
@@ -35,6 +36,9 @@ public class Chess : Game
         // Create a blank square
         square = new Texture2D(GraphicsDevice, 1, 1);
         square.SetData(new[] { Color.White });
+        selected = null;
+        highlight = new Vector2[2];
+        currentTeam = Team.White;
 
         Piece.board = new() {
             // Black
@@ -94,13 +98,13 @@ public class Chess : Game
 
         // TODO: Add your update logic here
         ButtonState newState = Mouse.GetState().LeftButton;
-
         if (newState == ButtonState.Pressed && oldState == ButtonState.Released) {
             // Get mouse pos
             Vector2 pos = new Vector2(
                 (int)Map(Mouse.GetState().X - 20, 0, 520, 0, 8),
                 (int)Map(Mouse.GetState().Y - 20, 0, 520, 0, 8)
             );
+
             if (selected != null) {
                 // Deselect the selected piece
                 if (selected.pos.Equals(pos))
@@ -115,6 +119,10 @@ public class Chess : Game
                             break;
                         }
                     
+                    if (currentTeam == Team.White)
+                        currentTeam = Team.Black;
+                    else currentTeam = Team.White;
+
                     if (selected is Pawn pawn)
                         pawn.hasMoved = true;
                     selected.pos = pos;
@@ -122,20 +130,20 @@ public class Chess : Game
                 }
 
                 // Select different piece
-                else foreach(Piece p in Piece.board)
-                    if (p.pos.Equals(pos)) {
-                        selected = p;
-                        break;
-                    }
+                else {
+                    selected = null;
+                    foreach(Piece p in Piece.board)
+                        if (p.pos.Equals(pos) && p.team == currentTeam) {
+                            selected = p;
+                            break;
+                        }
+                }
             }
-            else {
-                selected = null;
-                foreach(Piece p in Piece.board)
-                    if (p.pos.Equals(pos)) {
-                        selected = p;
-                        break;
-                    }
-            }
+            else foreach(Piece p in Piece.board)
+                if (p.pos.Equals(pos) && p.team == currentTeam) {
+                    selected = p;
+                    break;
+                }
         }
 
         oldState = newState;
@@ -161,12 +169,25 @@ public class Chess : Game
                     ), Color.Beige
                 );
 
-        foreach(Piece p in Piece.board)
-            p.Draw();
+        // Highlight selected piece
+        if (selected != null)
+        _spriteBatch.Draw(square, new Rectangle(
+            (int)selected.pos.X * 65 + 20,
+            (int)selected.pos.Y * 65 + 20,
+            65, 65
+        ), Color.GreenYellow * 0.5f);
 
+        // Draw move preview
         if (selected != null)
             foreach(Vector2 v in selected.GetAvailable())
-                _spriteBatch.Draw(square, new Rectangle((int)v.X*65+20, (int)v.Y*65+20, 20, 20), Color.Red);
+                _spriteBatch.Draw(
+                    spriteSheet, new Rectangle((int)v.X*65+20, (int)v.Y*65+20, 65, 65),
+                    new Rectangle(Piece.board.Any(p => p.pos.Equals(v)) ? 65 : 0, 130, 65, 65),
+                    Color.White
+                );
+
+        foreach(Piece p in Piece.board)
+            p.Draw();
                 
         _spriteBatch.End();
 

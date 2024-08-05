@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,7 +37,6 @@ public class Chess : Game
         square.SetData(new[] { Color.White });
 
         Piece.board = new() {
-            new Rook(new(4, 4), Team.Black),
             // Black
             new Rook(new(0, 0), Team.Black),
             new Knight(new(1, 0), Team.Black),
@@ -96,15 +96,45 @@ public class Chess : Game
         ButtonState newState = Mouse.GetState().LeftButton;
 
         if (newState == ButtonState.Pressed && oldState == ButtonState.Released) {
-            int x = (int)Map(Mouse.GetState().X - 20, 0, 520, 0, 8);
-            int y = (int)Map(Mouse.GetState().Y - 20, 0, 520, 0, 8);
-            if (selected != null && selected.pos.Equals(new Vector2(x, y)))
-                selected = null;
+            // Get mouse pos
+            Vector2 pos = new Vector2(
+                (int)Map(Mouse.GetState().X - 20, 0, 520, 0, 8),
+                (int)Map(Mouse.GetState().Y - 20, 0, 520, 0, 8)
+            );
+            if (selected != null) {
+                // Deselect the selected piece
+                if (selected.pos.Equals(pos))
+                    selected = null;
+                
+                // Move piece
+                else if (selected.GetAvailable().Any(p => p.Equals(pos))) {
+                    // Eat piece
+                    foreach(Piece p in Piece.board)
+                        if (p.pos.Equals(pos)) {
+                            Piece.board.Remove(p);
+                            break;
+                        }
+                    
+                    if (selected is Pawn pawn)
+                        pawn.hasMoved = true;
+                    selected.pos = pos;
+                    selected = null;
+                }
+
+                // Select different piece
+                else foreach(Piece p in Piece.board)
+                    if (p.pos.Equals(pos)) {
+                        selected = p;
+                        break;
+                    }
+            }
             else {
                 selected = null;
                 foreach(Piece p in Piece.board)
-                    if (p.pos.Equals(new Vector2(x, y)))
+                    if (p.pos.Equals(pos)) {
                         selected = p;
+                        break;
+                    }
             }
         }
 

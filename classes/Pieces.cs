@@ -29,13 +29,10 @@ abstract class Piece {
         source = new Rectangle(0, size * (int)team, size, size);
     }
 
-    protected bool IsAvailable(Vector2 _pos, bool sameTeam = true) {
-        if (this is Pawn) {
-            return false;
-        }
-        else if (sameTeam)
-            return !board.Any(p => p.pos.Equals(_pos) && p.team == team);
-        else return !board.Any(p => p.pos.Equals(_pos) && p.team != team);
+    protected bool IsAvailable(Vector2 _pos, bool otherTeam = false) {
+        if (otherTeam)
+            return !board.Any(p => p.pos.Equals(_pos) && p.team != team);
+        else return !board.Any(p => p.pos.Equals(_pos) && p.team == team);
     }
 
     protected List<Vector2> CleanAvailable() {
@@ -52,7 +49,7 @@ abstract class Piece {
         available.Clear();
         bool[] finishedPaths = new bool[transforms.Length];
         for(int i = 1; i < 8; i++) {
-            for(int j = 0; j < 4; j++) {
+            for(int j = 0; j < transforms.Length; j++) {
                 if (!finishedPaths[j]) {
                     Vector2 _pos = pos + Vector2.Multiply(transforms[j], i);
                     bool stopped = false;
@@ -173,7 +170,7 @@ sealed class Rook : Piece {
 }
 
 sealed class Pawn : Piece {
-    bool hasMoved = false;
+    public bool hasMoved = false;
 
     public Pawn(Vector2 pos, Team team) : base(pos, team) {
         source.X = 5*size;
@@ -181,9 +178,15 @@ sealed class Pawn : Piece {
 
     public override List<Vector2> GetAvailable() {
         available.Clear();
-        if (!hasMoved)
-            available.Add(pos + new Vector2(0, team == Team.White? -2 : 2));
-        available.Add(pos + new Vector2(0, team == Team.White? -1 : 1));
+        Vector2 offset = new Vector2(0, team == Team.White? -1 : 1);
+        if (!board.Any(p => p.pos.Equals(pos + offset)))
+            available.Add(pos + offset);
+        if (!hasMoved && available.Count > 0 && !board.Any(p => p.pos.Equals(pos + Vector2.Multiply(offset, 2))))
+            available.Add(pos + Vector2.Multiply(offset, 2));
+
+        for(int i = -1; i <= 1; i += 2)
+            if (!IsAvailable(pos + offset + new Vector2(i, 0), true))
+                available.Add(pos + offset + new Vector2(i, 0));
         return CleanAvailable();
     }
 }

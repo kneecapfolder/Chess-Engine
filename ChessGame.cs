@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO.Compression;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -32,13 +35,13 @@ public class Chess : Game
         _graphics.PreferredBackBufferWidth = 560;
         _graphics.PreferredBackBufferHeight = 560;
         _graphics.ApplyChanges();
+        selected = null;
+        highlight = Enumerable.Repeat(new Vector2(-1, -1), 3).ToArray();
+        currentTeam = Team.White;
 
         // Create a blank square
         square = new Texture2D(GraphicsDevice, 1, 1);
         square.SetData(new[] { Color.White });
-        selected = null;
-        highlight = new Vector2[2];
-        currentTeam = Team.White;
 
         Piece.board = new() {
             // Black
@@ -112,19 +115,38 @@ public class Chess : Game
                 
                 // Move piece
                 else if (selected.GetAvailable().Any(p => p.Equals(pos))) {
+                    highlight[0] = selected.pos;
+                    highlight[1] = pos;
+
                     // Eat piece
                     foreach(Piece p in Piece.board)
                         if (p.pos.Equals(pos)) {
                             Piece.board.Remove(p);
                             break;
                         }
+
+                    // Castling
+                    if (selected is King && !selected.hasMoved) {
+                        Rook rook = new(new Vector2(-1, -1), Team.White);
+                        if (pos.X - selected.pos.X == 2) {
+                            rook = (Rook)Piece.board.Find(p => p is Rook && p.pos.X == 7 && p.team == currentTeam);
+                            rook.pos.X -= 2;
+                            rook.hasMoved = true;
+                        }
+                        else if (pos.X - selected.pos.X == -2){
+                            rook = (Rook)Piece.board.Find(p => p is Rook && p.pos.X == 0 && p.team == currentTeam);
+                            rook.pos.X += 3;
+                            rook.hasMoved = true;
+                        }
+                    }
                     
+                    // Switch turn
                     if (currentTeam == Team.White)
                         currentTeam = Team.Black;
                     else currentTeam = Team.White;
 
-                    if (selected is Pawn pawn)
-                        pawn.hasMoved = true;
+                    if (selected is Pawn or Rook or King)
+                        selected.hasMoved = true;
                     selected.pos = pos;
                     selected = null;
                 }
@@ -171,11 +193,18 @@ public class Chess : Game
 
         // Highlight selected piece
         if (selected != null)
-        _spriteBatch.Draw(square, new Rectangle(
-            (int)selected.pos.X * 65 + 20,
-            (int)selected.pos.Y * 65 + 20,
-            65, 65
-        ), Color.GreenYellow * 0.5f);
+            highlight[2] = selected.pos;
+        else highlight[2] = new Vector2(-1, -1);
+        
+        foreach(Vector2 pos in highlight) {
+            if (pos.X != -1)
+                _spriteBatch.Draw(square, new Rectangle(
+                    (int)pos.X * 65 + 20,
+                    (int)pos.Y * 65 + 20,
+                    65, 65
+                ), Color.GreenYellow * 0.5f);
+
+        }
 
         // Draw move preview
         if (selected != null)

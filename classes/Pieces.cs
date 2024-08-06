@@ -17,7 +17,8 @@ abstract class Piece {
     public static Texture2D spriteSheet;
     public static SpriteBatch _spriteBatch;
     public static List<Piece> board;
-
+    
+    public bool hasMoved = false;
     public Vector2 pos;
     public Team team;
     public List<Vector2> available = new(); // List of available possitions
@@ -82,6 +83,7 @@ abstract class Piece {
 }
 
 sealed class King : Piece {
+    
     public King(Vector2 pos, Team team) : base(pos, team) {
         source.X = 0;
     }
@@ -92,6 +94,19 @@ sealed class King : Piece {
             for(int x = -1; x <= 1; x++)
                 if (IsAvailable(pos + new Vector2(x, y)))
                     available.Add(pos + new Vector2(x, y));
+
+        // Castling
+        if (!hasMoved) {
+            if (
+                board.Any(p => p.pos == pos - new Vector2(4, 0) && !p.hasMoved && p is Rook) &&
+                !board.Any(p => p.pos == pos - new Vector2(3, 0) || p.pos == pos - new Vector2(2, 0) || p.pos == pos - new Vector2(1, 0))
+            ) available.Add(pos - new Vector2(2, 0)); // left castle
+
+            if (
+                board.Any(p => p.pos == pos + new Vector2(3, 0) && !p.hasMoved && p is Rook) &&
+                !board.Any(p => p.pos == pos + new Vector2(2, 0) || p.pos == pos + new Vector2(1, 0))
+            ) available.Add(pos + new Vector2(2, 0)); // Left castle
+        }
         return CleanAvailable();
     }
 }
@@ -155,6 +170,8 @@ sealed class Knight : Piece {
 }
 
 sealed class Rook : Piece {
+
+
     public Rook(Vector2 pos, Team team) : base(pos, team) {
         source.X = 4*size;
     }
@@ -170,7 +187,7 @@ sealed class Rook : Piece {
 }
 
 sealed class Pawn : Piece {
-    public bool hasMoved = false;
+
 
     public Pawn(Vector2 pos, Team team) : base(pos, team) {
         source.X = 5*size;

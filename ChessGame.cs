@@ -121,9 +121,6 @@ public class Chess : Game
                             Piece.board.Remove(p);
                             break;
                         }
-                        if (p is Pawn pawnPiece) {
-                            pawnPiece.justLeaped = false;
-                        }
                     }
 
                     // Castling
@@ -162,6 +159,10 @@ public class Chess : Game
                     }
                     if (selected is Rook or King)
                         selected.hasMoved = true;
+
+                    foreach(Piece p in Piece.board)
+                        if (p is Pawn p1 && p != selected)
+                            p1.justLeaped = false;
 
                     selected.pos = pos;
                     selected = null;

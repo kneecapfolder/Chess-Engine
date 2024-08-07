@@ -187,7 +187,7 @@ sealed class Rook : Piece {
 }
 
 sealed class Pawn : Piece {
-
+    public bool justLeaped = false;
 
     public Pawn(Vector2 pos, Team team) : base(pos, team) {
         source.X = 5*size;
@@ -202,8 +202,11 @@ sealed class Pawn : Piece {
             available.Add(pos + Vector2.Multiply(offset, 2));
 
         for(int i = -1; i <= 1; i += 2)
-            if (!IsAvailable(pos + offset + new Vector2(i, 0), true))
+            if (!IsAvailable(pos + offset + new Vector2(i, 0), true) || (board.Any(p => p.pos == pos + new Vector2(i, 0) && p is Pawn pawn && pawn.justLeaped && IsAvailable(pos + offset + new Vector2(i, 0)))))
                 available.Add(pos + offset + new Vector2(i, 0));
+
+
+        
         return CleanAvailable();
     }
 }

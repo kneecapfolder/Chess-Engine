@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO.Compression;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -119,11 +116,15 @@ public class Chess : Game
                     highlight[1] = pos;
 
                     // Eat piece
-                    foreach(Piece p in Piece.board)
+                    foreach(Piece p in Piece.board) {
                         if (p.pos.Equals(pos)) {
                             Piece.board.Remove(p);
                             break;
                         }
+                        if (p is Pawn pawnPiece) {
+                            pawnPiece.justLeaped = false;
+                        }
+                    }
 
                     // Castling
                     if (selected is King && !selected.hasMoved) {
@@ -145,8 +146,23 @@ public class Chess : Game
                         currentTeam = Team.Black;
                     else currentTeam = Team.White;
 
-                    if (selected is Pawn or Rook or King)
+                    // Updating move checks
+                    if (selected is Pawn pawn) {
                         selected.hasMoved = true;
+                        pawn.justLeaped = false;
+                        if (Math.Abs(pawn.pos.Y - pos.Y) == 2)
+                            pawn.justLeaped = true;
+                            
+                        // En passant
+                        if (pawn.pos.X != pos.X && pawn.pos.Y != pos.Y) {
+                            Piece eaten = Piece.board.Find(p => p.pos == new Vector2(pos.X, pawn.pos.Y) && p is Pawn p1 && p1.justLeaped);
+                            if (eaten != null)
+                                Piece.board.Remove(eaten);
+                        }
+                    }
+                    if (selected is Rook or King)
+                        selected.hasMoved = true;
+
                     selected.pos = pos;
                     selected = null;
                 }

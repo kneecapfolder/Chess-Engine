@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sprites/pieces.png</SourceFile>
-  <SourceTime>2024-08-02T21:02:10.5897457+03:00</SourceTime>
+  <SourceTime>2024-08-05T20:25:00.4284683+03:00</SourceTime>
   <DestFile>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sprites/pieces.xnb</DestFile>
-  <DestTime>2024-08-02T21:08:32.3967546+03:00</DestTime>
+  <DestTime>2024-08-08T20:12:38.5237424+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2022-07-26T14:44:56+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

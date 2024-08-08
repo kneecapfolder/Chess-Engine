@@ -25,3 +25,8 @@ c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\obj\Debug\net6.0\Chess.pdb
 c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\obj\Debug\net6.0\Chess.genruntimeconfig.cache
 c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\obj\Debug\net6.0\ref\Chess.dll
 c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\obj\Debug\net6.0\Chess.sourcelink.json
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\eat.ogg
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\eat.xnb
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\move.ogg
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\move.xnb
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\select.xnb

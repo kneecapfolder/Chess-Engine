@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pieces;
@@ -12,7 +14,8 @@ public class Chess : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    ButtonState oldState = ButtonState.Released;
+    Dictionary<string, SoundEffect> sfx;
+    ButtonState oldState;
     Texture2D spriteSheet;
     Texture2D square;
     Piece selected;
@@ -39,6 +42,9 @@ public class Chess : Game
         // Create a blank square
         square = new Texture2D(GraphicsDevice, 1, 1);
         square.SetData(new[] { Color.White });
+
+        oldState = ButtonState.Released;
+        sfx = new Dictionary<string, SoundEffect>();
 
         Piece.board = new() {
             // Black
@@ -89,6 +95,11 @@ public class Chess : Game
         spriteSheet = Content.Load<Texture2D>("sprites/pieces");
         Piece._spriteBatch = _spriteBatch;
         Piece.spriteSheet = spriteSheet;
+
+        // Load sound effects
+        sfx.Add("eat", Content.Load<SoundEffect>("sound-effects/eat"));
+        sfx.Add("move", Content.Load<SoundEffect>("sound-effects/move"));
+        sfx.Add("select", Content.Load<SoundEffect>("sound-effects/select"));
     }
 
     protected override void Update(GameTime gameTime)
@@ -116,12 +127,18 @@ public class Chess : Game
                     highlight[1] = pos;
 
                     // Eat piece
+                    bool hasEaten = false;
                     foreach(Piece p in Piece.board) {
                         if (p.pos.Equals(pos)) {
                             Piece.board.Remove(p);
+                            sfx["eat"].Play();
+                            hasEaten = true;
                             break;
                         }
                     }
+
+                    if (!hasEaten)
+                        sfx["move"].Play();
 
                     // Castling
                     if (selected is King && !selected.hasMoved) {
@@ -174,13 +191,17 @@ public class Chess : Game
                     foreach(Piece p in Piece.board)
                         if (p.pos.Equals(pos) && p.team == currentTeam) {
                             selected = p;
+                            sfx["select"].Play();
                             break;
                         }
                 }
             }
+
+            // Select a new piece
             else foreach(Piece p in Piece.board)
                 if (p.pos.Equals(pos) && p.team == currentTeam) {
                     selected = p;
+                    sfx["select"].Play();
                     break;
                 }
         }

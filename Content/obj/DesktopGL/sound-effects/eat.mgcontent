@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/eat.mp3</SourceFile>
+  <SourceTime>2024-08-08T21:15:48.3473484+03:00</SourceTime>
+  <DestFile>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sound-effects/eat.xnb</DestFile>
+  <DestTime>2024-08-08T23:18:04.9386839+03:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2022-07-26T14:44:56+03:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2022-07-26T14:44:56+03:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

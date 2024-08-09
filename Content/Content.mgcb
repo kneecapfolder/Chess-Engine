@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin sound-effects/castle.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound-effects/castle.mp3
+
 #begin sound-effects/eat.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor

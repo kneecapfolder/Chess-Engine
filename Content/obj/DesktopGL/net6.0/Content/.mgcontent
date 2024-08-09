@@ -4,12 +4,14 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/castle.mp3</File>
     <File>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/eat.mp3</File>
     <File>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/move.mp3</File>
     <File>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/select.mp3</File>
     <File>c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sprites/pieces.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

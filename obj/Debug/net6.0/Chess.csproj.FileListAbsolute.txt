@@ -30,3 +30,5 @@ c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-
 c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\move.ogg
 c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\move.xnb
 c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\select.xnb
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\castle.ogg
+c:\Users\ilan7\OneDrive\Plocha\projects\C#\Chess\bin\Debug\net6.0\Content\sound-effects\castle.xnb

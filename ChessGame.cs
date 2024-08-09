@@ -100,6 +100,7 @@ public class Chess : Game
         sfx.Add("eat", Content.Load<SoundEffect>("sound-effects/eat"));
         sfx.Add("move", Content.Load<SoundEffect>("sound-effects/move"));
         sfx.Add("select", Content.Load<SoundEffect>("sound-effects/select"));
+        sfx.Add("castle", Content.Load<SoundEffect>("sound-effects/castle"));
     }
 
     protected override void Update(GameTime gameTime)
@@ -117,6 +118,8 @@ public class Chess : Game
             );
 
             if (selected != null) {
+                SoundEffect sound = sfx["move"];
+
                 // Deselect the selected piece
                 if (selected.pos.Equals(pos))
                     selected = null;
@@ -127,18 +130,13 @@ public class Chess : Game
                     highlight[1] = pos;
 
                     // Eat piece
-                    bool hasEaten = false;
                     foreach(Piece p in Piece.board) {
                         if (p.pos.Equals(pos)) {
                             Piece.board.Remove(p);
-                            sfx["eat"].Play();
-                            hasEaten = true;
+                            sound = sfx["eat"];
                             break;
                         }
                     }
-
-                    if (!hasEaten)
-                        sfx["move"].Play();
 
                     // Castling
                     if (selected is King && !selected.hasMoved) {
@@ -147,11 +145,13 @@ public class Chess : Game
                             rook = (Rook)Piece.board.Find(p => p is Rook && p.pos.X == 7 && p.team == currentTeam);
                             rook.pos.X -= 2;
                             rook.hasMoved = true;
+                            sound = sfx["castle"];
                         }
                         else if (pos.X - selected.pos.X == -2){
                             rook = (Rook)Piece.board.Find(p => p is Rook && p.pos.X == 0 && p.team == currentTeam);
                             rook.pos.X += 3;
                             rook.hasMoved = true;
+                            sound = sfx["castle"];
                         }
                     }
                     
@@ -170,8 +170,10 @@ public class Chess : Game
                         // En passant
                         if (pawn.pos.X != pos.X && pawn.pos.Y != pos.Y) {
                             Piece eaten = Piece.board.Find(p => p.pos == new Vector2(pos.X, pawn.pos.Y) && p is Pawn p1 && p1.justLeaped);
-                            if (eaten != null)
+                            if (eaten != null) {
                                 Piece.board.Remove(eaten);
+                                sound = sfx["eat"];
+                            }
                         }
                     }
                     if (selected is Rook or King)
@@ -182,7 +184,16 @@ public class Chess : Game
                             p1.justLeaped = false;
 
                     selected.pos = pos;
+
+                    // Promote pawn
+                    if (selected is Pawn && (selected.pos.Y == 0 || selected.pos.Y == 7)) {
+                        Piece.board.Add(new Queen(selected.pos, selected.team));
+                        Piece.board.Remove(selected);
+                    }
+
                     selected = null;
+
+                    sound.Play();
                 }
 
                 // Select different piece

@@ -1,5 +1,6 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/eat.mp3","c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sound-effects/eat.xnb","SoundEffectProcessor","SoundEffectContent",25325,318245,0.2039062
+"c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/castle.mp3","c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sound-effects/castle.xnb","SoundEffectProcessor","SoundEffectContent",14880,154661,0.1912512
+"c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/eat.mp3","c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sound-effects/eat.xnb","SoundEffectProcessor","SoundEffectContent",26893,322853,0.120729
 "c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/move.mp3","c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sound-effects/move.xnb","SoundEffectProcessor","SoundEffectContent",5641,55589,0.1897097
 "c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sound-effects/select.mp3","c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sound-effects/select.xnb","SoundEffectProcessor","SoundEffectContent",3790,27941,0.1095782
 "c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/sprites/pieces.png","c:/Users/ilan7/OneDrive/Plocha/projects/C#/Chess/Content/bin/DesktopGL/sprites/pieces.xnb","TextureProcessor","Texture2DContent",36907,304285,0.0452351
